@@ -1,7 +1,7 @@
 package bitset
 
 import (
-	bse "go-bit-axon/bitset_error"
+	bse "go-bloom-axon/bitset_error"
 )
 
 type BitSet struct {
@@ -27,6 +27,10 @@ func (bs *BitSet) Set(n uint64) error {
 
 	bs.bitMap[targetKey] |= (1<<targetBit)
 	return nil
+}
+
+func (bs *BitSet) Size() uint64 {
+	return bs.size
 }
 
 func (bs *BitSet) Get(n uint64) (bool, error) {
