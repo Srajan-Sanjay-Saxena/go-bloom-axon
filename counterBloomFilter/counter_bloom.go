@@ -45,12 +45,14 @@ func (cbf *CountingBloomFilter) positions(item []byte) []uint64 {
 // Add increments the counter at each of the k hash positions.
 // Returns ErrCounterMaxed if any slot is already at 255.
 func (cbf *CountingBloomFilter) Add(item []byte) error {
-	for _, p := range cbf.positions(item) {
+	pos := cbf.positions(item)
+	
+	for _, p := range pos {
 		if cbf.counters[p] == 255 {
 			return ErrCounterMaxed
 		}
 	}
-	for _, p := range cbf.positions(item) {
+	for _, p := range pos {
 		cbf.counters[p]++
 	}
 	return nil
@@ -59,12 +61,14 @@ func (cbf *CountingBloomFilter) Add(item []byte) error {
 // Remove decrements the counter at each of the k hash positions.
 // Returns ErrUnderflow if any counter is already 0 — item was never added.
 func (cbf *CountingBloomFilter) Remove(item []byte) error {
-	for _, p := range cbf.positions(item) {
+	pos := cbf.positions(item)
+	
+	for _, p := range pos {
 		if cbf.counters[p] == 0 {
 			return ErrUnderflow
 		}
 	}
-	for _, p := range cbf.positions(item) {
+	for _, p := range pos {
 		cbf.counters[p]--
 	}
 	return nil
